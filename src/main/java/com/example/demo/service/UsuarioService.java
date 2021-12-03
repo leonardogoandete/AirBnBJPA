@@ -23,8 +23,5 @@ public class UsuarioService {
 
     public List<Usuario> buscaNome(String filtro){
         return (filtro != null) ? userRepo.findByUserContaining(filtro) : userRepo.findAll();
-
-        //return userRepo.findByUserContaining(filtro);
     }
-
 }

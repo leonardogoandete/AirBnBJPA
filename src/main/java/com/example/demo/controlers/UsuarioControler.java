@@ -3,9 +3,10 @@ package com.example.demo.controlers;
 import com.example.demo.model.Usuario;
 import com.example.demo.repository.UsuarioRepository;
 import com.example.demo.service.UsuarioService;
-import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,27 +15,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/clientes")
 public class UsuarioControler {
+
+    private final PasswordEncoder encoder;
+
     @Autowired
     private UsuarioRepository usuarioRepo;
 
     @Autowired
     private UsuarioService usuarioServ;
 
-    // lista usuarios
-    //@GetMapping
-    //public List<Usuario> listarUsuarios() {
-    //    return usuarioRepo.findAll();
-    //}
+    public UsuarioControler(PasswordEncoder encoder, UsuarioRepository usuarioRepo) {
+        this.encoder = encoder;
+        this.usuarioRepo = usuarioRepo;
+    }
 
-    // localhost:8080/clientes?filtro=a
-    //
-
-
-// funcionando >>> localhost:8080/clientes/teste?filtro=a
-    //@GetMapping
-    //public List<Usuario> listarUsuariosFiltro(@RequestParam(required = false) String filtro){
-    //    return usuarioRepo.findByUserEquals(filtro);
-    //}
 
     @GetMapping()
     public List<Usuario> listarUsuariosFiltro(@RequestParam(required = false) String filtro){
@@ -50,6 +44,7 @@ public class UsuarioControler {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void adicionarUsuario(@RequestBody Usuario usuario){
+        usuario.setSenha(encoder.encode(usuario.getSenha()));
         usuarioServ.addUsuario(usuario);
     }
 
@@ -59,5 +54,6 @@ public class UsuarioControler {
     public void deletaUsuario(@PathVariable Long id){
         usuarioServ.apaga(id);
     }
+
 
 }
