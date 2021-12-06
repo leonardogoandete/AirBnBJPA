@@ -2,10 +2,11 @@ package com.example.demo.model;
 
 import lombok.Data;
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @Entity
-public class Imovel {
+public class Imovel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
